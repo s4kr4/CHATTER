@@ -78,10 +78,13 @@ namespace CHATTER
 			//URLを置換
 			foreach (var url in status.Entities.Urls)
             {
-                Match m = TwitterTools.urlReg(status.Entities.Urls.ToString());
-                status.Text = status.Text.Replace(url.Url, url.DisplayUrl);
-				innerUrl = url.ExpandedUrl;
-            }
+				if (!string.IsNullOrEmpty(url.Url))
+				{
+					Match m = TwitterTools.urlReg(status.Entities.Urls.ToString());
+					status.Text = status.Text.Replace(url.Url, url.DisplayUrl);
+					innerUrl = url.ExpandedUrl;
+				}
+			}
 
 			//リツイート→赤、リプライ→緑、自分宛→青
 			if (status.RetweetedStatus != null)
