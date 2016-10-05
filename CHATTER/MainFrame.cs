@@ -96,7 +96,7 @@ namespace CHATTER
 			//ChangeTheme(Properties.Settings.Default.Theme);
 			ChangeTheme(Religious.Asama);
 			user =  await TwitterTools.UsersShow(Properties.Settings.Default.UserId);
-            TitleLabelA.Text = TitleLabelB.Text = "実況通神 - " + user.Name;
+            //TitleLabelA.Text = TitleLabelB.Text = "実況通神 - " + user.Name;
 			myIcon.ImageLocation = user.ProfileImageUrl.Replace("_normal", "");
 
 			GetHomeTimeline();

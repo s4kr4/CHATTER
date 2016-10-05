@@ -7,7 +7,7 @@ using CoreTweet;
 
 namespace CHATTER
 {
-    static class Program
+	static class Program
     {
 		/// <summary>
 		/// アプリケーションのメイン エントリ ポイントです。
