@@ -23,7 +23,7 @@ namespace CHATTER
 
 		private async void AsamaFrame_Load(object sender, EventArgs e)
 		{
-			user = await TwitterTools.UsersShow(Properties.Settings.Default.UserId);
+			user = await TwitterTools.ShowUser(Properties.Settings.Default.UserId);
 			myIcon.ImageLocation = user.ProfileImageUrl.Replace("_normal", "");
 
 		}

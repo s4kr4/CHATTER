@@ -241,7 +241,7 @@ namespace CHATTER
 
 		private async void ShowProfileFrame(User user)
 		{
-			ProfileFrame profileFrame = new ProfileFrame(tokens, await TwitterTools.UsersShow(user_id: user.Id));
+			ProfileFrame profileFrame = new ProfileFrame(tokens, await TwitterTools.ShowUser(user_id: user.Id));
 			profileFrame.Show();
 		}
 

@@ -93,10 +93,9 @@ namespace CHATTER
 		private async void MainFrame_Load(object sender, EventArgs e)
         {
 			//表示枠の諸々
-			//ChangeTheme(Properties.Settings.Default.Theme);
-			ChangeTheme(Religious.Asama);
-			user =  await TwitterTools.UsersShow(Properties.Settings.Default.UserId);
-            //TitleLabelA.Text = TitleLabelB.Text = "実況通神 - " + user.Name;
+			ChangeTheme(Properties.Settings.Default.Theme);
+			user = await TwitterTools.ShowUser(Properties.Settings.Default.UserId);
+			TitleLabelA.Text = TitleLabelB.Text = "実況通神 - " + user.Name;
 			myIcon.ImageLocation = user.ProfileImageUrl.Replace("_normal", "");
 
 			GetHomeTimeline();
@@ -498,7 +497,7 @@ namespace CHATTER
         //マイアイコンクリックでプロフィール表示
         private async void myIcon_Click(object sender, EventArgs e)
         {
-			User user = await TwitterTools.UsersShow(Properties.Settings.Default.UserId);
+			User user = await TwitterTools.ShowUser(Properties.Settings.Default.UserId);
 			ProfileFrame profileFrame = new ProfileFrame(TwitterTools.tokens, user);
 			profileFrame.Show();
 		}

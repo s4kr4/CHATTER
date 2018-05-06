@@ -1,49 +1,64 @@
-﻿using System;
-using System.Diagnostics;
-using System.Text.RegularExpressions;
-using System.Windows.Forms;
-using CoreTweet;
-using System.IO;
-using System.Threading.Tasks;
+﻿using CoreTweet;
 using CoreTweet.Core;
-using System.Linq;
-using System.Collections;
+using System;
 using System.Collections.Generic;
+using System.Configuration;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace CHATTER
 {
-    static class TwitterTools
+	static class TwitterTools
     {
-        private static Properties.Settings settings;
+		private static Properties.Settings settings;
+		private static string consumerKey;
+		private static string consumerSecret;
 		public static Tokens tokens;
 		public static List<MentionFrame> mentionFrameList;
 		public static MainFrame mainFrame;
 
 		static TwitterTools()
         {
-			settings = Properties.Settings.Default;
-			mentionFrameList = new List<MentionFrame>();
 		}
 
 		//OAuth認証
 		public static void Authentication()
         {
-			//Properties.Settings.Default.Reset();
-			if (!string.IsNullOrEmpty(Properties.Settings.Default.AccessToken)
-				&& !string.IsNullOrEmpty(Properties.Settings.Default.AccessTokenSecret))
+			settings = Properties.Settings.Default;
+			mentionFrameList = new List<MentionFrame>();
+
+			var configFile = @"secrets.config";
+			var exeFileMap = new ExeConfigurationFileMap { ExeConfigFilename = configFile };
+			var config = ConfigurationManager.OpenMappedExeConfiguration(exeFileMap, ConfigurationUserLevel.None);
+			consumerKey = config.AppSettings.Settings["ConsumerKey"].Value;
+			consumerSecret = config.AppSettings.Settings["ConsumerSecret"].Value;
+
+			//settings.Reset();
+
+			if (!string.IsNullOrEmpty(settings.AccessToken)
+				&& !string.IsNullOrEmpty(settings.AccessTokenSecret))
 			{
+				// 認証済みなら、保存済みのトークンからインスタンス生成
 				tokens = Tokens.Create(
-					Properties.Settings.Default.ConsumerKey,
-					Properties.Settings.Default.ConsumerSecret,
-					Properties.Settings.Default.AccessToken,
-					Properties.Settings.Default.AccessTokenSecret);
+					settings.ConsumerKey,
+					settings.ConsumerSecret,
+					settings.AccessToken,
+					settings.AccessTokenSecret
+				);
 			}
 			else
 			{
-				var session = OAuth.Authorize(Properties.Settings.Default.ConsumerKey, Properties.Settings.Default.ConsumerSecret);
+				// 未認証の場合、新規認証
+				var session = OAuth.Authorize(consumerKey, consumerSecret);
+				var uri = session.AuthorizeUri;
 
-				Process.Start(session.AuthorizeUri.ToString());
+				Process.Start(uri.AbsoluteUri);
 
+				// 認証フレームを開く
 				OAuthFrame oauthFrame = new OAuthFrame();
 				oauthFrame.ShowDialog();
 
@@ -51,10 +66,11 @@ namespace CHATTER
 				{
 					tokens = OAuth.GetTokens(session, oauthFrame.pin);
 
-					Properties.Settings.Default.AccessToken = tokens.AccessToken;
-					Properties.Settings.Default.AccessTokenSecret = tokens.AccessTokenSecret;
-					Properties.Settings.Default.UserId = tokens.UserId;
-					Properties.Settings.Default.ScreenName = tokens.ScreenName;
+					settings.AccessToken = tokens.AccessToken;
+					settings.AccessTokenSecret = tokens.AccessTokenSecret;
+					settings.UserId = tokens.UserId;
+					settings.ScreenName = tokens.ScreenName;
+					settings.Save();
 				}
 				catch (FormatException)
 				{
@@ -65,17 +81,19 @@ namespace CHATTER
 				{
 					oauthFrame.Dispose();
 				}
-
-				Properties.Settings.Default.Save();
 			}
 
-			mainFrame = new MainFrame();
-			Application.Run(mainFrame);
-			//Application.Run(new AsamaFrame());
+			// メインフレームを開く
+			Application.Run(new MainFrame());
+		}
+
+		public static User AuthorizedUser()
+		{
+			return tokens.Account.VerifyCredentials();
 		}
 
 		// ユーザー情報取得
-		public async static Task<User> UsersShow(long? user_id = null, string screen_name = null)
+		public async static Task<User> ShowUser(long? user_id = null, string screen_name = null)
 		{
 			if (tokens != null)
 			{

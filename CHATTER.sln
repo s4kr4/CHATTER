@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.23107.0
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CHATTER", "CHATTER\CHATTER.csproj", "{A30928BE-1C94-46B1-A6AD-E3965A4BE19A}"
+EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Setup", "Setup\Setup.vdproj", "{58EEC745-F8F6-4A45-8691-799C0E57C126}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{A30928BE-1C94-46B1-A6AD-E3965A4BE19A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{A30928BE-1C94-46B1-A6AD-E3965A4BE19A}.Release|x86.ActiveCfg = Release|x86
 		{A30928BE-1C94-46B1-A6AD-E3965A4BE19A}.Release|x86.Build.0 = Release|x86
+		{58EEC745-F8F6-4A45-8691-799C0E57C126}.Debug|Any CPU.ActiveCfg = Debug
+		{58EEC745-F8F6-4A45-8691-799C0E57C126}.Debug|x86.ActiveCfg = Debug
+		{58EEC745-F8F6-4A45-8691-799C0E57C126}.Release|Any CPU.ActiveCfg = Release
+		{58EEC745-F8F6-4A45-8691-799C0E57C126}.Release|x86.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
