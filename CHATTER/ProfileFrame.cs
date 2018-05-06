@@ -1,16 +1,13 @@
 ﻿using CoreTweet;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace CHATTER
 {
 	public partial class ProfileFrame : BaseFrame
 	{
-		private Tokens tokens;
 		private User user;
 
 		private List<TweetItem> tweetList;
@@ -33,7 +30,7 @@ namespace CHATTER
 
 		private bool isLoading;
 
-		public ProfileFrame(Tokens tokens, User user)
+		public ProfileFrame(User user)
 		{
 			InitializeComponent();
 
@@ -42,7 +39,6 @@ namespace CHATTER
 			//BackColor = transColor;
 			//TransparencyKey = transColor;
 
-			this.tokens = tokens;
 			this.user = user;
 			Text = user.Name;
 			isLoading = false;
@@ -95,7 +91,7 @@ namespace CHATTER
 					ItemList.SuspendLayout();
 					for (int i = index; i < statuses.Count; i++)
 					{
-						tweetList.Add(new TweetItem(tokens, statuses[i], this));
+						tweetList.Add(new TweetItem(statuses[i], this));
 						ItemList.Controls.Add(tweetList[i]);
 					}
 					ItemList.ResumeLayout();
@@ -140,7 +136,7 @@ namespace CHATTER
 					ItemList.SuspendLayout();
 					for (int i = index; i < favorites.Count; i++)
 					{
-						favoriteList.Add(new TweetItem(tokens, favorites[i], this));
+						favoriteList.Add(new TweetItem(favorites[i], this));
 						ItemList.Controls.Add(favoriteList[i]);
 					}
 					ItemList.ResumeLayout();
@@ -183,7 +179,7 @@ namespace CHATTER
 					ItemList.SuspendLayout();
 					for (int i = 0; i < friends.Count; i++)
 					{
-						friendList.Add(new UserItem(tokens, friends[i]));
+						friendList.Add(new UserItem(friends[i]));
 						ItemList.Controls.Add(friendList[i]);
 					}
 					ItemList.ResumeLayout();
@@ -224,7 +220,7 @@ namespace CHATTER
 					ItemList.SuspendLayout();
 					for (int i = 0; i < followers.Count; i++)
 					{
-						followerList.Add(new UserItem(tokens, followers[i]));
+						followerList.Add(new UserItem(followers[i]));
 						ItemList.Controls.Add(followerList[i]);
 					}
 					ItemList.ResumeLayout();
@@ -310,7 +306,7 @@ namespace CHATTER
 
 		private void DirectMailB_Click(object sender, EventArgs e)
 		{
-			MentionFrame mFrame = new MentionFrame(tokens, user.ScreenName);
+			MentionFrame mFrame = new MentionFrame(user.ScreenName);
 			mFrame.Show();
 		}
 

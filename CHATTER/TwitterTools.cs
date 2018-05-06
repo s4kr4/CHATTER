@@ -1,5 +1,6 @@
 ﻿using CoreTweet;
 using CoreTweet.Core;
+using CoreTweet.Streaming;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -17,7 +18,7 @@ namespace CHATTER
 		private static Properties.Settings settings;
 		private static string consumerKey;
 		private static string consumerSecret;
-		public static Tokens tokens;
+		private static Tokens tokens;
 		public static List<MentionFrame> mentionFrameList;
 		public static MainFrame mainFrame;
 
@@ -346,6 +347,11 @@ namespace CHATTER
 			{
 				return null;
 			}
+		}
+
+		public static IObservable<StreamingMessage> GetUserStream()
+		{
+			return tokens.Streaming.UserAsObservable();
 		}
 
 		// ユーザーのお気に入りを取得

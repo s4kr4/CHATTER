@@ -1,32 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using CoreTweet;
+﻿using CoreTweet;
 using CoreTweet.Streaming;
-using CoreTweet.Streaming.Reactive;
-using System.Reactive.Linq;
+using System;
+using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
-using CoreTweet.Core;
-using System.Collections;
+using System.Linq;
+using System.Reactive.Linq;
+using System.Windows.Forms;
 using System.Windows.Threading;
 
 namespace CHATTER
 {
-    public partial class MainFrame : BaseFrame
+	public partial class MainFrame : BaseFrame
     {
 		// 取得ツイート総数
 		private int tweetCount;
 		// ツイート表示最大数
 		private const int tweetMax = 100;
 
-		//public Tokens Program.tokens;
 		private User user;
 		private TweetItem[] tweetItem;
 
@@ -112,28 +103,15 @@ namespace CHATTER
 		}
 
 		// ツイートを追加
-		private void AddStatus(Status status, int position = -1)
+		private void AddStatusToTimeline(Status status, int position = 0)
 		{
 			TimeLine.SuspendLayout();
 
-			// 表示数制限
-			if (TimeLine.Controls.Count == tweetMax)
-			{
-				TimeLine.Controls.RemoveAt(TimeLine.Controls.Count - 1);
-			}
-
-			int i = TimeLine.Controls.Count;
-			tweetItem[i] = new TweetItem(TwitterTools.tokens, status, this);
-			TimeLine.Controls.Add(tweetItem[i]);
-
-			if (position != -1)
-			{
-				TimeLine.Controls.SetChildIndex(tweetItem[i], position);
-			}
+			var tweetItem = new TweetItem(status, this);
+			TimeLine.Controls.Add(tweetItem);
+			TimeLine.Controls.SetChildIndex(tweetItem, position);
 
 			TimeLine.ResumeLayout();
-
-			tweetCount++;
 		}
 
 		//通知枠に追加
@@ -151,30 +129,20 @@ namespace CHATTER
 			if (!isLoading)
 			{
 				isLoading = true;
-				var status = await TwitterTools.GetHomeTimeline(max_id);
 
-				if (status != null)
+				var statuses = await TwitterTools.GetHomeTimeline(max_id);
+				foreach (Status status in statuses)
 				{
-					int index = 0;
-					if (tweetCount != 0)
-					{
-						index = 1;
-					}
-					for (int i = index; i < status.Count; i++)
-					{
-						AddStatus(status[i]);
-					}
-
-					// 一番古いツイートのIDを保存しておく
-					maxId = status[status.Count - 1].Id;
+					AddStatusToTimeline(status, -1);
 				}
+
 				isLoading = false;
 			}
 		}
 
 		private void StartUserstream()
 		{
-			var stream = TwitterTools.tokens.Streaming.UserAsObservable().Publish();
+			var stream = TwitterTools.GetUserStream();
 
 			stream.OfType<StatusMessage>().Subscribe(m => onStatus(m));
 
@@ -187,8 +155,6 @@ namespace CHATTER
 			stream.Catch(stream.DelaySubscription(TimeSpan.FromSeconds(10)).Retry())
 				.Repeat()
 				.Subscribe((StreamingMessage m) => Console.WriteLine(m));
-
-			var connection = stream.Connect();
 		}
 
 		private void onStatus(StatusMessage m)
@@ -196,8 +162,7 @@ namespace CHATTER
 			var status = m.Status;
 			Invoke((MethodInvoker)delegate
 			{
-				// UserStreamで流れてきたツイートは一番上(position:0)に表示する
-				AddStatus(status, 0);
+				AddStatusToTimeline(status);
 
 				if (status.InReplyToStatusId != null || status.InReplyToUserId != null)
 				{
@@ -224,7 +189,7 @@ namespace CHATTER
 						// 無かったら新規に表示
 						if (existFrame == null)
 						{
-							MentionFrame mFrame = new MentionFrame(TwitterTools.tokens, status);
+							MentionFrame mFrame = new MentionFrame(status);
 							TwitterTools.mentionFrameList.Add(mFrame);
 							mFrame.Show();
 						}
@@ -498,7 +463,7 @@ namespace CHATTER
         private async void myIcon_Click(object sender, EventArgs e)
         {
 			User user = await TwitterTools.ShowUser(Properties.Settings.Default.UserId);
-			ProfileFrame profileFrame = new ProfileFrame(TwitterTools.tokens, user);
+			ProfileFrame profileFrame = new ProfileFrame(user);
 			profileFrame.Show();
 		}
 

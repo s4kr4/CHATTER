@@ -1,12 +1,7 @@
 ﻿using CoreTweet;
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -16,7 +11,6 @@ namespace CHATTER
 	{
 		private string targetScreenName;
 		private Status status;
-		private Tokens tokens;
 		private int MaxLength;
 		private List<Status> replies = new List<Status>();
 
@@ -35,25 +29,23 @@ namespace CHATTER
         }
 
 		// Case: DM
-		public MentionFrame(Tokens tokens, string targetScreenName)
+		public MentionFrame(string targetScreenName)
 		{
 			InitializeComponent();
 
 			ChangeTheme(Properties.Settings.Default.Theme);
 
-			this.tokens = tokens;
 			this.targetScreenName = targetScreenName;
 			mode = Mode.DirectMessage;
 		}
 
 		// Case:Reply
-		public MentionFrame(Tokens tokens, Status status)
+		public MentionFrame(Status status)
 		{
 			InitializeComponent();
 
 			ChangeTheme(Properties.Settings.Default.Theme);
 
-			this.tokens = tokens;
 			this.status = status;
 			mode = Mode.Reply;
 		}
@@ -99,7 +91,7 @@ namespace CHATTER
 
 					// 自身を追加してからリプライを追加していく
 					replies.Add(status);
-					MentionList.Controls.Add(new TweetItem(tokens, status, this));
+					MentionList.Controls.Add(new TweetItem(status, this));
 
 					await GetReply(status);
 
@@ -117,14 +109,14 @@ namespace CHATTER
 			{
 				if (status.InReplyToStatusId != null)
 				{
-					Status replyStatus = await tokens.Statuses.ShowAsync(id: (long)status.InReplyToStatusId);
-					replies.Add(replyStatus);
+					//Status replyStatus = await tokens.Statuses.ShowAsync(id: (long)status.InReplyToStatusId);
+					//replies.Add(replyStatus);
 
-					MentionList.SuspendLayout();
-					MentionList.Controls.Add(new TweetItem(tokens, replyStatus, this));
-					MentionList.ResumeLayout();
+					//MentionList.SuspendLayout();
+					//MentionList.Controls.Add(new TweetItem(replyStatus, this));
+					//MentionList.ResumeLayout();
 
-					await GetReply(replyStatus);
+					//await GetReply(replyStatus);
 				}
 			}
 			catch (Exception e)
@@ -183,7 +175,7 @@ namespace CHATTER
 		{
 			MentionList.SuspendLayout();
 			replies.Add(status);
-			var newTweet = new TweetItem(tokens, status, this);
+			var newTweet = new TweetItem(status, this);
             MentionList.Controls.Add(newTweet);
 			MentionList.Controls.SetChildIndex(newTweet, 0);
 			MentionList.ResumeLayout();

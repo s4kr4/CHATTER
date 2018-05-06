@@ -2,9 +2,9 @@
 using System;
 using System.Diagnostics;
 using System.Drawing;
+using System.Net;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
-using System.Net;
 
 namespace CHATTER
 {
@@ -19,7 +19,7 @@ namespace CHATTER
         private MainFrame mainFrame;
 		private Control parentFrame;
 
-        public TweetItem(Tokens tokens, Status status, Control control)
+        public TweetItem(Status status, Control control)
         {
             InitializeComponent();
 
@@ -241,7 +241,7 @@ namespace CHATTER
 
 		private async void ShowProfileFrame(User user)
 		{
-			ProfileFrame profileFrame = new ProfileFrame(tokens, await TwitterTools.ShowUser(user_id: user.Id));
+			ProfileFrame profileFrame = new ProfileFrame(await TwitterTools.ShowUser(user_id: user.Id));
 			profileFrame.Show();
 		}
 
@@ -312,7 +312,7 @@ namespace CHATTER
 						// 無かったら新規に表示
 						if (existFrame == null)
 						{
-							MentionFrame mFrame = new MentionFrame(tokens, status);
+							MentionFrame mFrame = new MentionFrame(status);
 							TwitterTools.mentionFrameList.Add(mFrame);
 							mFrame.Show();
 						}
@@ -402,7 +402,7 @@ namespace CHATTER
 					break;
 				case "ProfileFrame":
 				case "MentionFrame":
-					MentionFrame mentionFrame = new MentionFrame(tokens, status);
+					MentionFrame mentionFrame = new MentionFrame(status);
 					mentionFrame.Show();
 					break;
 				default:
