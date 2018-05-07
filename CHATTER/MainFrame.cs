@@ -142,7 +142,7 @@ namespace CHATTER
 
 		private void StartUserstream()
 		{
-			var stream = TwitterTools.GetUserStream();
+			var stream = TwitterTools.GetUserStream().Publish();
 
 			stream.OfType<StatusMessage>().Subscribe(m => onStatus(m));
 
@@ -155,6 +155,8 @@ namespace CHATTER
 			stream.Catch(stream.DelaySubscription(TimeSpan.FromSeconds(10)).Retry())
 				.Repeat()
 				.Subscribe((StreamingMessage m) => Console.WriteLine(m));
+
+			stream.Connect();
 		}
 
 		private void onStatus(StatusMessage m)
