@@ -109,14 +109,14 @@ namespace CHATTER
 			{
 				if (status.InReplyToStatusId != null)
 				{
-					//Status replyStatus = await tokens.Statuses.ShowAsync(id: (long)status.InReplyToStatusId);
-					//replies.Add(replyStatus);
+					Status replyStatus = await TwitterTools.ShowStatus(id: (long)status.InReplyToStatusId);
+					replies.Add(replyStatus);
 
-					//MentionList.SuspendLayout();
-					//MentionList.Controls.Add(new TweetItem(replyStatus, this));
-					//MentionList.ResumeLayout();
+					MentionList.SuspendLayout();
+					MentionList.Controls.Add(new TweetItem(replyStatus, this));
+					MentionList.ResumeLayout();
 
-					//await GetReply(replyStatus);
+					await GetReply(replyStatus);
 				}
 			}
 			catch (Exception e)

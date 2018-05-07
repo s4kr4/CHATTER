@@ -168,6 +168,36 @@ namespace CHATTER
 			}
 		}
 
+		// 指定IDのツイートを取得
+		public static async Task<Status> ShowStatus(long? id)
+		{
+			if (id != null)
+			{
+				try
+				{
+					Status status = await tokens.Statuses.ShowAsync(id: id.Value);
+
+					if (status != null)
+					{
+						return status;
+					}
+					else
+					{
+						return null;
+					}
+				}
+				catch (Exception e)
+				{
+					Console.WriteLine(e.Message);
+					return null;
+				}
+			}
+			else
+			{
+				return null;
+			}
+		}
+
 		// リツイートする
 		public static async Task<bool> RetweetStatus(Status status)
 		{
