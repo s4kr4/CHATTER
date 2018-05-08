@@ -14,7 +14,7 @@ using System.Windows.Forms;
 namespace CHATTER
 {
 	static class TwitterTools
-    {
+	{
 		private static Properties.Settings settings;
 		private static string consumerKey;
 		private static string consumerSecret;
@@ -23,12 +23,12 @@ namespace CHATTER
 		public static MainFrame mainFrame;
 
 		static TwitterTools()
-        {
+		{
 		}
 
 		//OAuth認証
 		public static void Authentication()
-        {
+		{
 			settings = Properties.Settings.Default;
 			mentionFrameList = new List<MentionFrame>();
 
@@ -464,40 +464,40 @@ namespace CHATTER
 
 		// リプライかどうか
 		public static bool IsReply(Status status)
-        {
-            if (status.InReplyToUserId != null)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
+		{
+			if (status.InReplyToUserId != null)
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
 
 		// 自分宛てのリプライかどうか
-        public static bool IsReplyToMe(Status status)
-        {
-            if (status.InReplyToUserId == Properties.Settings.Default.UserId)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
+		public static bool IsReplyToMe(Status status)
+		{
+			if (status.InReplyToUserId == Properties.Settings.Default.UserId)
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
+		}
 
 		public static void SetReply(long statusId, string screenName)
 		{
 			mainFrame.SetReply(statusId, screenName);
 		}
-        //via取り出し用正規表現
+		//via取り出し用正規表現
 		public static Match viaReg(string via)
 		{
 			string pattern = @"<a.*?>(?<via>.*?)</a>";
 			return Regex.Match(via, pattern, RegexOptions.IgnoreCase | RegexOptions.Singleline);
-        }
+		}
 		//URL取り出し用正規表現
 		public static Match urlReg(string via)
 		{
@@ -515,6 +515,6 @@ namespace CHATTER
 			string pattern = @"@(?<srcName>[a-zA-Z0-9]*)";
 			return Regex.Match(via, pattern, RegexOptions.IgnoreCase | RegexOptions.Singleline);
 		}
-    }
+	}
 }
 

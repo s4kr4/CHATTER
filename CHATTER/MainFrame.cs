@@ -12,7 +12,7 @@ using System.Windows.Threading;
 namespace CHATTER
 {
 	public partial class MainFrame : BaseFrame
-    {
+	{
 		// 取得ツイート総数
 		private int tweetCount;
 		// ツイート表示最大数
@@ -54,9 +54,9 @@ namespace CHATTER
 
 		public static MainFrame mainFrame { get; set; }
 
-        public MainFrame()
-        {
-            InitializeComponent();
+		public MainFrame()
+		{
+			InitializeComponent();
 
 			tweetCount = 0;
 			tweetItem = new TweetItem[tweetMax];
@@ -64,8 +64,8 @@ namespace CHATTER
 			fileLocation = new List<string>();
 
 			maxId = null;
-            isLoading = false;
-            religious = Religious.Sanct;
+			isLoading = false;
+			religious = Religious.Sanct;
 
 			mentionFrameList = new List<MentionFrame>();
 
@@ -82,7 +82,7 @@ namespace CHATTER
 		}
 
 		private async void MainFrame_Load(object sender, EventArgs e)
-        {
+		{
 			//表示枠の諸々
 			ChangeTheme(Properties.Settings.Default.Theme);
 			user = await TwitterTools.ShowUser(Properties.Settings.Default.UserId);
@@ -431,16 +431,16 @@ namespace CHATTER
 
 		//Ctrl + Enterでツイート送信
 		private void TweetBox_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.KeyCode == Keys.Enter && e.Control)
-            {
+		{
+			if (e.KeyCode == Keys.Enter && e.Control)
+			{
 				UpdateStatus();
 				e.SuppressKeyPress = true;
 			}
 		}
 
-        private void TweetBox_MouseEnter(object sender, EventArgs e)
-        {
+		private void TweetBox_MouseEnter(object sender, EventArgs e)
+		{
 			if (ActiveForm == this)
 			{
 				TweetBox.Focus();
@@ -449,29 +449,29 @@ namespace CHATTER
 
 		//送信ボタン
 		private void Send_Click(object sender, EventArgs e)
-        {
+		{
 			UpdateStatus();
 		}
 
 		//再読込ボタン
 		private void Reload_Click(object sender, EventArgs e)
-        {
-            TimeLine.Controls.Clear();
+		{
+			TimeLine.Controls.Clear();
 			GetHomeTimeline();
 			maxId = null;
-        }
+		}
 
-        //マイアイコンクリックでプロフィール表示
-        private async void myIcon_Click(object sender, EventArgs e)
-        {
+		//マイアイコンクリックでプロフィール表示
+		private async void myIcon_Click(object sender, EventArgs e)
+		{
 			User user = await TwitterTools.ShowUser(Properties.Settings.Default.UserId);
 			ProfileFrame profileFrame = new ProfileFrame(user);
 			profileFrame.Show();
 		}
 
-        //マウスホイールでスクロール
-        private void TimeLine_MouseWheel(object sender, MouseEventArgs e)
-        {
+		//マウスホイールでスクロール
+		private void TimeLine_MouseWheel(object sender, MouseEventArgs e)
+		{
 			//if (Math.Abs(e.Delta) < 120) return;
 
 			ScrollableControl c = (ScrollableControl)this.TimeLine;
@@ -492,59 +492,59 @@ namespace CHATTER
 			}
 		}
 
-        // ScrollButton
-        // Up
-        private void CursorRU_Click(object sender, EventArgs e)
-        {
-            ScrollableControl c = (ScrollableControl)this.TimeLine;
-            Point pre = c.AutoScrollPosition;
-            pre.Y *= -1;
-            pre.Y -= 60;
-            c.AutoScrollPosition = pre;
-        }
-        // Down
-        private void CursorRD_Click(object sender, EventArgs e)
-        {
-            ScrollableControl c = (ScrollableControl)this.TimeLine;
-            Point pre = c.AutoScrollPosition;
-            pre.Y *= -1;
-            pre.Y += 60;
-            c.AutoScrollPosition = pre;
-        }
-        // Highest
-        private void DCursorRU_Click(object sender, EventArgs e)
-        {
-            this.TimeLine.AutoScrollPosition = new Point(0, 0);
-        }
-        // Lowest
-        private void DCursorRD_Click(object sender, EventArgs e)
-        {
-            this.TimeLine.AutoScrollPosition = new Point(0, 10000);
-        }
+		// ScrollButton
+		// Up
+		private void CursorRU_Click(object sender, EventArgs e)
+		{
+			ScrollableControl c = (ScrollableControl)this.TimeLine;
+			Point pre = c.AutoScrollPosition;
+			pre.Y *= -1;
+			pre.Y -= 60;
+			c.AutoScrollPosition = pre;
+		}
+		// Down
+		private void CursorRD_Click(object sender, EventArgs e)
+		{
+			ScrollableControl c = (ScrollableControl)this.TimeLine;
+			Point pre = c.AutoScrollPosition;
+			pre.Y *= -1;
+			pre.Y += 60;
+			c.AutoScrollPosition = pre;
+		}
+		// Highest
+		private void DCursorRU_Click(object sender, EventArgs e)
+		{
+			this.TimeLine.AutoScrollPosition = new Point(0, 0);
+		}
+		// Lowest
+		private void DCursorRD_Click(object sender, EventArgs e)
+		{
+			this.TimeLine.AutoScrollPosition = new Point(0, 10000);
+		}
 
-        //透過度変更ボタン
-        //下げる
-        private void CursorLD_Click(object sender, EventArgs e)
-        {
-            if (this.Opacity > 0.2D)
-            {
-                this.Opacity -= 0.1D;
-            }
-        }
-        //上げる
-        private void CursorLU_Click(object sender, EventArgs e)
-        {
-            if (this.Opacity < 1.0D)
-            {
-                this.Opacity += 0.1D;
-            }
-        }
+		//透過度変更ボタン
+		//下げる
+		private void CursorLD_Click(object sender, EventArgs e)
+		{
+			if (this.Opacity > 0.2D)
+			{
+				this.Opacity -= 0.1D;
+			}
+		}
+		//上げる
+		private void CursorLU_Click(object sender, EventArgs e)
+		{
+			if (this.Opacity < 1.0D)
+			{
+				this.Opacity += 0.1D;
+			}
+		}
 
-        //文字数表示変更
-        private void TweetBox_TextChanged(object sender, EventArgs e)
-        {
+		//文字数表示変更
+		private void TweetBox_TextChanged(object sender, EventArgs e)
+		{
 			SendButton.Text = "送神\n" + (140 - TweetBox.TextLength).ToString();
-            //StringCount.Text = (140 - TweetBox.TextLength).ToString();
+			//StringCount.Text = (140 - TweetBox.TextLength).ToString();
 
 			// Replyモード時にテキストを全消去するとTweetモードに戻る
 			if (TweetBox.TextLength == 0 && sendMode == SendMode.Reply)
@@ -564,21 +564,21 @@ namespace CHATTER
 		}
 
 		private void TweetBox_DragEnter(object sender, DragEventArgs e)
-        {
-            e.Effect = DragDropEffects.All;
-        }
+		{
+			e.Effect = DragDropEffects.All;
+		}
 
-        private void TweetBox_DragDrop(object sender, DragEventArgs e)
-        {
-            if (e.Data.GetDataPresent(DataFormats.FileDrop))
-            {
+		private void TweetBox_DragDrop(object sender, DragEventArgs e)
+		{
+			if (e.Data.GetDataPresent(DataFormats.FileDrop))
+			{
 				string[] tmp = (string[])e.Data.GetData(DataFormats.FileDrop);
 				FileInfo fi;
 
 				for (int i = 0; i < tmp.Length; i++)
 				{
 					fi = new FileInfo(tmp[i]);
-					
+
 					if (fi.Extension == ".gif")
 					{
 						// gif動画は5MBまで
@@ -629,27 +629,27 @@ namespace CHATTER
 					sendMode = SendMode.TweetWithMedia;
 				}
 				this.Focus();
-            }
-        }
+			}
+		}
 
-        private void Title_MouseDown(object sender, MouseEventArgs e)
-        {
-            if ((e.Button & MouseButtons.Left) == MouseButtons.Left)
-            {
-                mousePoint = new Point(e.X, e.Y);
-            }
-        }
+		private void Title_MouseDown(object sender, MouseEventArgs e)
+		{
+			if ((e.Button & MouseButtons.Left) == MouseButtons.Left)
+			{
+				mousePoint = new Point(e.X, e.Y);
+			}
+		}
 
-        private void Title_MouseMove(object sender, MouseEventArgs e)
-        {
-            if ((e.Button & MouseButtons.Left) == MouseButtons.Left)
-            {
-                if (e.X - mousePoint.X > 150)
-                {
-                    this.Close();
-                }
-            }
-        }
+		private void Title_MouseMove(object sender, MouseEventArgs e)
+		{
+			if ((e.Button & MouseButtons.Left) == MouseButtons.Left)
+			{
+				if (e.X - mousePoint.X > 150)
+				{
+					this.Close();
+				}
+			}
+		}
 
 		private void pictureBox_MouseClick(object sender, MouseEventArgs e)
 		{

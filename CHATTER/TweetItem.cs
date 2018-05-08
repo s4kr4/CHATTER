@@ -9,23 +9,23 @@ using System.Windows.Forms;
 namespace CHATTER
 {
 	public partial class TweetItem : UserControl
-    {
+	{
 		private string innerUrl;
 		private MediaEntity[] mediaEntity = new MediaEntity[4];
 		private PictureBox[] pictureBox = new PictureBox[4];
-        private Status status;
+		private Status status;
 		private User user;
 		private Tokens tokens;
-        private MainFrame mainFrame;
+		private MainFrame mainFrame;
 		private Control parentFrame;
 
-        public TweetItem(Status status, Control control)
-        {
-            InitializeComponent();
+		public TweetItem(Status status, Control control)
+		{
+			InitializeComponent();
 
 			parentFrame = control;
 
-            this.status = status;
+			this.status = status;
 			this.user = status.User;
 			this.tokens = tokens;
 			innerUrl = "";
@@ -36,20 +36,20 @@ namespace CHATTER
 
 			TabStop = false;
 
-            if (status.Source.IndexOf("<a") >= 0)
-            {
-                Match m = TwitterTools.viaReg(status.Source);
-                status.Source = m.Groups["via"].Value;
-            }
+			if (status.Source.IndexOf("<a") >= 0)
+			{
+				Match m = TwitterTools.viaReg(status.Source);
+				status.Source = m.Groups["via"].Value;
+			}
 
 			// 画像が含まれていたら表示する
-            if (status.Entities.Media != null)
-            {
+			if (status.Entities.Media != null)
+			{
 				status.Text = status.Text.Replace(status.Entities.Media[0].Url, "");
 				innerUrl = status.Entities.Media[0].ExpandedUrl;
 
 				if (status.ExtendedEntities.Media != null)
-                {
+				{
 					if (status.ExtendedEntities.Media[0].Type == "animated_gif")
 					{
 						StartButton.BackColor = Color.Transparent;
@@ -77,7 +77,7 @@ namespace CHATTER
 
 			//URLを置換
 			foreach (var url in status.Entities.Urls)
-            {
+			{
 				if (!string.IsNullOrEmpty(url.Url))
 				{
 					Match m = TwitterTools.urlReg(status.Entities.Urls.ToString());
@@ -121,8 +121,8 @@ namespace CHATTER
 			}
 
 			switch (parentFrame.Name)
-            {
-                case "MainFrame":
+			{
+				case "MainFrame":
 					mainFrame = (MainFrame)control.TopLevelControl;
 
 					TimeLabel.Text = status.CreatedAt.LocalDateTime + " (via " + status.Source + ")";
@@ -142,7 +142,7 @@ namespace CHATTER
 									pictureBox2.Location = new Point(216, TimeLabel.Location.Y + TimeLabel.Size.Height + 3);
 									break;
 								case 2:
-									pictureBox3.Location =new Point(60, pictureBox1.Location.Y + pictureBox1.Size.Height + 3);
+									pictureBox3.Location = new Point(60, pictureBox1.Location.Y + pictureBox1.Size.Height + 3);
 									break;
 								case 3:
 									pictureBox4.Location = new Point(216, pictureBox2.Location.Y + pictureBox2.Size.Height + 3);
@@ -156,27 +156,27 @@ namespace CHATTER
 
 					if (status.IsFavorited.Value) FavoriteIcon.Image = Properties.Resources.favorite_b;
 
-                    break;
+					break;
 
-                case "ProfileFrame":
-                case "MentionFrame":
+				case "ProfileFrame":
+				case "MentionFrame":
 					MaximumSize = new Size(240, 5000);
-                    IconFrame.Size = new Size(30, 30);
+					IconFrame.Size = new Size(30, 30);
 
-                    NameLabel.Location = new Point(35, 3);
+					NameLabel.Location = new Point(35, 3);
 
-                    TweetTextLabel.Location = new Point(35, 18);
-                    TweetTextLabel.MinimumSize = new Size(205, 15);
-                    TweetTextLabel.MaximumSize = new Size(205, 4500);
+					TweetTextLabel.Location = new Point(35, 18);
+					TweetTextLabel.MinimumSize = new Size(205, 15);
+					TweetTextLabel.MaximumSize = new Size(205, 4500);
 
 					TimeLabel.Text = status.CreatedAt.LocalDateTime + "\n(via " + status.Source + ")";
 					TimeLabel.Location = new Point(35, TweetTextLabel.Location.Y + TweetTextLabel.Size.Height + 3);
 
-                    ReplyIcon.Location = new Point(170, TweetTextLabel.Location.Y + TweetTextLabel.Size.Height + 3);
+					ReplyIcon.Location = new Point(170, TweetTextLabel.Location.Y + TweetTextLabel.Size.Height + 3);
 
-                    RetweetIcon.Location = new Point(193, TweetTextLabel.Location.Y + TweetTextLabel.Size.Height + 3);
+					RetweetIcon.Location = new Point(193, TweetTextLabel.Location.Y + TweetTextLabel.Size.Height + 3);
 
-                    FavoriteIcon.Location = new Point(216, TweetTextLabel.Location.Y + TweetTextLabel.Size.Height + 3);
+					FavoriteIcon.Location = new Point(216, TweetTextLabel.Location.Y + TweetTextLabel.Size.Height + 3);
 
 					// 画像位置調整
 					for (int i = 0; i < pictureBox.Length; i++)
@@ -209,11 +209,11 @@ namespace CHATTER
 						}
 					}
 
-                    break;
+					break;
 
-                default:
-                    break;
-            }
+				default:
+					break;
+			}
 
 			// リツイートユーザー情報の位置調整
 			if (status.Entities.Media != null && status.ExtendedEntities.Media != null)
@@ -246,7 +246,7 @@ namespace CHATTER
 		}
 
 		private void IconFrame_Click(object sender, EventArgs e)
-        {
+		{
 			if (status.RetweetedStatus == null)
 			{
 				ShowProfileFrame(user);
@@ -259,7 +259,7 @@ namespace CHATTER
 
 		//ContextMenu
 		private void MyTweetLabel_MouseClick(object sender, MouseEventArgs e)
-        {
+		{
 			if (e.Button == MouseButtons.Left)
 			{
 				if (status.User.Id == Properties.Settings.Default.UserId)
@@ -273,8 +273,8 @@ namespace CHATTER
 			}
 		}
 
-        private async void ActionMenu_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
-        {
+		private async void ActionMenu_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+		{
 			switch (e.ClickedItem.ToString())
 			{
 				case "通神帯接続":
@@ -353,7 +353,7 @@ namespace CHATTER
 		}
 
 		private async void FavoriteIcon_MouseClick(object sender, MouseEventArgs e)
-        {
+		{
 			await TwitterTools.CreateFavotire(status.Id);
 			FavoriteIcon.Image = Properties.Resources.favorite_b;
 		}
@@ -369,7 +369,7 @@ namespace CHATTER
 		}
 
 		private async void RetweetIcon_MouseClick(object sender, MouseEventArgs e)
-        {
+		{
 			DialogResult result = MessageBox.Show("Retweet?", "RETWEET", MessageBoxButtons.YesNo);
 
 			if (result == DialogResult.Yes)
@@ -383,18 +383,18 @@ namespace CHATTER
 			}
 		}
 
-        private void ReplyIcon_MouseEnter(object sender, EventArgs e)
-        {
-            ReplyIcon.Image = Properties.Resources.reply_b;
-        }
+		private void ReplyIcon_MouseEnter(object sender, EventArgs e)
+		{
+			ReplyIcon.Image = Properties.Resources.reply_b;
+		}
 
-        private void ReplyIcon_MouseLeave(object sender, EventArgs e)
-        {
-            ReplyIcon.Image = Properties.Resources.reply_a;
-        }
+		private void ReplyIcon_MouseLeave(object sender, EventArgs e)
+		{
+			ReplyIcon.Image = Properties.Resources.reply_a;
+		}
 
-        private void ReplyIcon_MouseClick(object sender, MouseEventArgs e)
-        {
+		private void ReplyIcon_MouseClick(object sender, MouseEventArgs e)
+		{
 			switch (parentFrame.Name)
 			{
 				case "MainFrame":

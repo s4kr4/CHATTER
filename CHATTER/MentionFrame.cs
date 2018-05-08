@@ -26,7 +26,7 @@ namespace CHATTER
 			InitializeComponent();
 
 			ChangeTheme(Properties.Settings.Default.Theme);
-        }
+		}
 
 		// Case: DM
 		public MentionFrame(string targetScreenName)
@@ -176,7 +176,7 @@ namespace CHATTER
 			MentionList.SuspendLayout();
 			replies.Add(status);
 			var newTweet = new TweetItem(status, this);
-            MentionList.Controls.Add(newTweet);
+			MentionList.Controls.Add(newTweet);
 			MentionList.Controls.SetChildIndex(newTweet, 0);
 			MentionList.ResumeLayout();
 
