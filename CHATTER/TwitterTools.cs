@@ -24,11 +24,6 @@ namespace CHATTER
 
 		static TwitterTools()
 		{
-		}
-
-		//OAuth認証
-		public static void Authentication()
-		{
 			settings = Properties.Settings.Default;
 			mentionFrameList = new List<MentionFrame>();
 
@@ -37,7 +32,11 @@ namespace CHATTER
 			var config = ConfigurationManager.OpenMappedExeConfiguration(exeFileMap, ConfigurationUserLevel.None);
 			consumerKey = config.AppSettings.Settings["ConsumerKey"].Value;
 			consumerSecret = config.AppSettings.Settings["ConsumerSecret"].Value;
+		}
 
+		//OAuth認証
+		public static void Authentication()
+		{
 			//settings.Reset();
 
 			if (!string.IsNullOrEmpty(settings.AccessToken)
