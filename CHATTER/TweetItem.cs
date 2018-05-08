@@ -15,7 +15,6 @@ namespace CHATTER
 		private PictureBox[] pictureBox = new PictureBox[4];
 		private Status status;
 		private User user;
-		private Tokens tokens;
 		private MainFrame mainFrame;
 		private Control parentFrame;
 
@@ -27,7 +26,6 @@ namespace CHATTER
 
 			this.status = status;
 			this.user = status.User;
-			this.tokens = tokens;
 			innerUrl = "";
 			pictureBox[0] = pictureBox1;
 			pictureBox[1] = pictureBox2;
