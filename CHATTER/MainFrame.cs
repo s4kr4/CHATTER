@@ -13,13 +13,10 @@ namespace CHATTER
 {
 	public partial class MainFrame : BaseFrame
 	{
-		// 取得ツイート総数
-		private int tweetCount;
 		// ツイート表示最大数
-		private const int tweetMax = 100;
+		private const int statusCountMax = 100;
 
 		private User user;
-		private TweetItem[] tweetItem;
 
 		public enum Religious
 		{
@@ -58,8 +55,6 @@ namespace CHATTER
 		{
 			InitializeComponent();
 
-			tweetCount = 0;
-			tweetItem = new TweetItem[tweetMax];
 			pictureBox = new PictureBox[4];
 			fileLocation = new List<string>();
 
@@ -111,7 +106,17 @@ namespace CHATTER
 			TimeLine.Controls.Add(tweetItem);
 			TimeLine.Controls.SetChildIndex(tweetItem, position);
 
+			if (TimeLine.Controls.Count > statusCountMax)
+			{
+				ReduceTimeline();
+			}
+
 			TimeLine.ResumeLayout();
+		}
+
+		private void ReduceTimeline()
+		{
+			TimeLine.Controls.RemoveAt(statusCountMax);
 		}
 
 		//通知枠に追加
@@ -204,8 +209,6 @@ namespace CHATTER
 					}
 				}
 			});
-
-			Console.WriteLine(tweetCount + ": " + m.Status.Text);
 		}
 
 		private void onEventMessage(EventMessage m)
@@ -401,7 +404,6 @@ namespace CHATTER
 					TweetBox.Location = new Point(118, TweetBox.Location.Y);
 					SendButton.Location = new Point(628, SendButton.Location.Y);
 
-
 					break;
 				case (int)Religious.Sanct:
 					BackgroundImage = Properties.Resources.SanctMain;
@@ -483,7 +485,7 @@ namespace CHATTER
 
 			//c.AutoScrollPosition = new Point(0, offset);
 
-			if (TimeLine.Controls.Count < tweetMax)
+			if (TimeLine.Controls.Count < statusCountMax)
 			{
 				if ((c.VerticalScroll.Maximum - c.VerticalScroll.LargeChange) - c.VerticalScroll.Value < 0)
 				{
