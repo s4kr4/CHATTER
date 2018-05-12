@@ -20,7 +20,6 @@ namespace CHATTER
 		private static string consumerSecret;
 		private static Tokens tokens;
 		public static List<MentionFrame> mentionFrameList;
-		public static MainFrame mainFrame;
 
 		static TwitterTools()
 		{
@@ -515,11 +514,6 @@ namespace CHATTER
 			{
 				return false;
 			}
-		}
-
-		public static void SetReply(long statusId, string screenName)
-		{
-			mainFrame.SetReply(statusId, screenName);
 		}
 		//via取り出し用正規表現
 		public static Match viaReg(string via)
