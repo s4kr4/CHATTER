@@ -81,9 +81,6 @@ namespace CHATTER
 					oauthFrame.Dispose();
 				}
 			}
-
-			// メインフレームを開く
-			Application.Run(new MainFrame());
 		}
 
 		public static User AuthorizedUser()

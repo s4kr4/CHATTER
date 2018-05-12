@@ -15,7 +15,11 @@ namespace CHATTER
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
 
+			// 認証
 			TwitterTools.Authentication();
+
+			// メインフレームを開く
+			Application.Run(new MainFrame());
 		}
 	}
 }
