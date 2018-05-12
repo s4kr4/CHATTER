@@ -16,8 +16,8 @@ namespace CHATTER
 	static class TwitterTools
 	{
 		private static Properties.Settings settings;
-		private static string consumerKey;
-		private static string consumerSecret;
+		private static readonly string consumerKey;
+		private static readonly string consumerSecret;
 		private static Tokens tokens;
 		public static List<MentionFrame> mentionFrameList;
 
